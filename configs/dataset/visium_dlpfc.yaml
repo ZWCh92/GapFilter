@@ -1,0 +1,30 @@
+name: DLPFC
+platform: Visium
+
+processed_data_dir: ${paths.processed_data_dir}/${.platform}/${.name}
+interim_data_dir: ${paths.interim_data_dir}/${.platform}/${.name}
+
+samples:
+  - 151507
+  - 151508
+  - 151509
+  - 151510
+  - 151669
+  - 151670
+  - 151671
+  - 151672
+  - 151673
+  - 151674
+  - 151675
+  - 151676
+
+files:
+  expression: expr.h5ad
+  image: HE.tif
+  mpp: MPP.txt
+  general_svg: SVG_top_2000.txt
+  top_svg: SVG_top_200.txt
+
+metadata:
+  spot_diameter_um: 55
+  spot_center_distance_um: 100

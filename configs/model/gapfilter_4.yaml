@@ -1,0 +1,45 @@
+name: gapfilter_4
+
+# 网络（feature_dim / gene_dim 为 null 时由 Dataset 推断）
+feature_dim: null
+gene_dim: null
+d_model: 512
+n_heads: 4
+dropout: 0.1
+
+# 距离 bias / 低维残差
+use_dist_bias: true
+dist_lambda_init: -1.0
+zero_dist_head: true
+use_gated_residual: true
+residual_rank: 1024
+residual_gamma: 1.0
+residual_finetune_epochs: null  # null 表示与 max_epochs 相同
+
+# 损失：L1 + pearson + cosine
+pearson_weight: 1.0
+cosine_weight: 0.8
+
+# 近邻（不含自身）
+n_neighbors: 9
+max_distance: null
+gene_list: general_svg
+features_filename: expr_with_HE_features.h5ad
+feature_key: null
+
+# 训练（按 spot 划分 CV）
+batch_size: 128
+num_workers: 4
+max_epochs: 500
+lr: 1.0e-3
+lr_min: 1.0e-6
+weight_decay: 1.0e-4
+n_folds: 4
+seed: 42
+patience: 15
+gradient_clip_val: 1.0
+
+# 预测
+predict_n_neighbors: 18
+ckpt_dir: null
+fold: ensemble

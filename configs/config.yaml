@@ -1,0 +1,14 @@
+defaults:
+  - model: gapfilter_4
+  - dataset: visiumhd_hpc
+  - experiment: train
+  - feature: h-optimus-1
+  - _self_
+
+cuda: 1
+
+paths:
+  root_dir: ${hydra:runtime.cwd}
+  processed_data_dir: ${paths.root_dir}/data/processed
+  interim_data_dir: ${paths.root_dir}/data/interim
+  pretrained_models_dir: ${paths.root_dir}/models/pretrained_models

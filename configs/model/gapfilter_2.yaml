@@ -1,0 +1,34 @@
+name: gapfilter_2
+
+# 网络结构（feature_dim / gene_dim 为 null 时由 Dataset 自动推断）
+# feature_dim 应为 local∥contextual 拼接维（偶数）；模型内做门控融合
+feature_dim: null
+gene_dim: null
+hidden_dims: [1536, 1024, 512]
+dropout: 0.1
+
+# 配对 Dataset（n_neighbors 不含自身）
+n_neighbors: 6
+bidirectional: true
+max_distance: null
+# 待预测基因：top_svg / general_svg / null（全部基因）
+gene_list: general_svg
+features_filename: expr_with_HE_features.h5ad
+feature_key: null  # null 时自动推断 adata.obsm 中的 *_features
+
+# 训练（按 spot 划分 CV）
+batch_size: 256
+num_workers: 4
+max_epochs: 500
+lr: 1.0e-3
+lr_min: 1.0e-6
+weight_decay: 1.0e-4
+n_folds: 5
+seed: 42
+patience: 15
+gradient_clip_val: 1.0
+
+# 预测（距离加权聚合）
+predict_n_neighbors: 6
+ckpt_dir: /mnt/zzf_nas/A_xff/GapFilter/models/gapfilter_2/VisiumHD/HPC/2026-07-24_08-41-18  # 训练输出目录，内含 <sample>/fold_*/best.ckpt 与 gene_names.npz
+fold: ensemble  # ensemble | 0 | 1 | 2 | ...

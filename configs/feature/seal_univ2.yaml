@@ -1,0 +1,13 @@
+name: seal_univ2
+backbone: univ2
+model_path: ${paths.pretrained_models_dir}/SEAL/seal_univ2_vision.pth
+
+target_mpp: 0.5
+
+patch_size_px: 224
+
+feature_dim: 1536
+
+normalization:
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]

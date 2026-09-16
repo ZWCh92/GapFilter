@@ -1,0 +1,32 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "gapfilter"
+version = "0.0.1"
+description = "Imputing gene expression in ST gap regions using H\u0026E data."
+authors = [
+  { name = "Fangfang Xu" },
+]
+license = { file = "LICENSE" }
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+]
+requires-python = "~=3.9.0"
+
+
+[tool.ruff]
+line-length = 99
+src = ["gapfilter"]
+include = ["pyproject.toml", "gapfilter/**/*.py"]
+
+[tool.ruff.lint]
+extend-select = ["I"]  # Add import sorting
+
+[tool.ruff.lint.isort]
+known-first-party = ["gapfilter"]
+force-sort-within-sections = true
+

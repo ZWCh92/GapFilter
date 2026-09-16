@@ -1,0 +1,224 @@
+hydra:
+  run:
+    dir: .
+  sweep:
+    dir: .
+    subdir: .
+  launcher:
+    _target_: hydra._internal.core_plugins.basic_launcher.BasicLauncher
+  sweeper:
+    _target_: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
+    max_batch_size: null
+    params: null
+  help:
+    app_name: ${hydra.job.name}
+    header: '${hydra.help.app_name} is powered by Hydra.
+
+      '
+    footer: 'Powered by Hydra (https://hydra.cc)
+
+      Use --hydra-help to view Hydra specific help
+
+      '
+    template: '${hydra.help.header}
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (group=option)
+
+
+      $APP_CONFIG_GROUPS
+
+
+      == Config ==
+
+      Override anything in the config (foo.bar=value)
+
+
+      $CONFIG
+
+
+      ${hydra.help.footer}
+
+      '
+  hydra_help:
+    template: 'Hydra (${hydra.runtime.version})
+
+      See https://hydra.cc for more info.
+
+
+      == Flags ==
+
+      $FLAGS_HELP
+
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (For example, append hydra/job_logging=disabled
+      to command line)
+
+
+      $HYDRA_CONFIG_GROUPS
+
+
+      Use ''--cfg hydra'' to Show the Hydra config.
+
+      '
+    hydra_help: ???
+  hydra_logging:
+    version: 1
+    formatters:
+      simple:
+        format: '[%(asctime)s][HYDRA] %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+    root:
+      level: INFO
+      handlers:
+      - console
+    loggers:
+      logging_example:
+        level: DEBUG
+    disable_existing_loggers: false
+  job_logging:
+    version: 1
+    formatters:
+      simple:
+        format: '[%(asctime)s][%(name)s][%(levelname)s] - %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+      file:
+        class: logging.FileHandler
+        formatter: simple
+        filename: ${hydra.runtime.output_dir}/${hydra.job.name}.log
+    root:
+      level: INFO
+      handlers:
+      - console
+      - file
+    disable_existing_loggers: false
+  env: {}
+  mode: MULTIRUN
+  searchpath: []
+  callbacks: {}
+  output_subdir: null
+  overrides:
+    hydra:
+    - hydra.mode=MULTIRUN
+    task:
+    - experiment=extract
+    - feature=seal_univ2
+    - dataset=visiumhd_hbc,visiumhd_hpc,xenium_hbc_s1r1,xenium_hbc_s1r2,visium_dlpfc
+  job:
+    name: features
+    chdir: null
+    override_dirname: dataset=visiumhd_hbc,visiumhd_hpc,xenium_hbc_s1r1,xenium_hbc_s1r2,visium_dlpfc,experiment=extract,feature=seal_univ2
+    id: ???
+    num: ???
+    config_name: config
+    env_set: {}
+    env_copy: []
+    config:
+      override_dirname:
+        kv_sep: '='
+        item_sep: ','
+        exclude_keys: []
+  runtime:
+    version: 1.3.4
+    version_base: '1.3'
+    cwd: /mnt/zzf_nas/A_xff/GapFilter
+    config_sources:
+    - path: hydra.conf
+      schema: pkg
+      provider: hydra
+    - path: /mnt/zzf_nas/A_xff/GapFilter/configs
+      schema: file
+      provider: main
+    - path: ''
+      schema: structured
+      provider: schema
+    output_dir: ???
+    choices:
+      feature: seal_univ2
+      experiment: extract
+      dataset: visiumhd_hpc
+      model: gapfilter_3
+      hydra/env: default
+      hydra/callbacks: null
+      hydra/job_logging: default
+      hydra/hydra_logging: default
+      hydra/hydra_help: default
+      hydra/help: default
+      hydra/sweeper: basic
+      hydra/launcher: basic
+      hydra/output: default
+  verbose: false
+model:
+  name: gapfilter_3
+  feature_dim: null
+  gene_dim: null
+  d_model: 1024
+  n_heads: 4
+  dropout: 0.1
+  cycle_weight: 0.0
+  cycle_chunk: 1024
+  n_neighbors: 9
+  max_distance: null
+  gene_list: general_svg
+  features_filename: expr_with_HE_features.h5ad
+  feature_key: null
+  batch_size: 128
+  num_workers: 4
+  max_epochs: 500
+  lr: 0.001
+  lr_min: 1.0e-06
+  weight_decay: 0.0001
+  n_folds: 4
+  seed: 42
+  patience: 15
+  gradient_clip_val: 1.0
+  predict_n_neighbors: 18
+  ckpt_dir: /mnt/zzf_nas/A_xff/GapFilter/models/gapfilter_3/VisiumHD/HPC/2026-07-25_11-48-09
+  fold: ensemble
+dataset:
+  name: HPC
+  platform: VisiumHD
+  processed_data_dir: ${paths.processed_data_dir}/${.platform}/${.name}
+  interim_data_dir: ${paths.interim_data_dir}/${.platform}/${.name}
+  files:
+    expression: expr.h5ad
+    image: HE.tif
+    mpp: MPP.txt
+    general_svg: SVG_top_2000.txt
+    top_svg: SVG_top_200.txt
+  metadata:
+    spot_diameter_um: 55
+    spot_center_distance_um: 100
+feature:
+  name: seal_univ2
+  backbone: univ2
+  model_path: ${paths.pretrained_models_dir}/SEAL/seal_univ2_vision.pth
+  target_mpp: 0.5
+  patch_size_px: 224
+  feature_dim: 1536
+  normalization:
+    mean:
+    - 0.485
+    - 0.456
+    - 0.406
+    std:
+    - 0.229
+    - 0.224
+    - 0.225
+cuda: 1
+paths:
+  root_dir: ${hydra:runtime.cwd}
+  processed_data_dir: ${paths.root_dir}/data/processed
+  interim_data_dir: ${paths.root_dir}/data/interim
+  pretrained_models_dir: ${paths.root_dir}/models/pretrained_models

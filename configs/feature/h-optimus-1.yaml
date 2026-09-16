@@ -1,0 +1,8 @@
+name: h-optimus-1
+model_path: ${paths.pretrained_models_dir}/H-optimus-1
+
+target_mpp: 0.5
+
+patch_size_px: 224
+
+feature_dim: 1536

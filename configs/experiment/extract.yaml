@@ -1,0 +1,10 @@
+# @package _global_
+hydra:
+  output_subdir: null
+  run:
+    dir: .
+
+# === 新增：针对 multirun 的配置 ===
+  sweep:           # 旧版本也叫 sweep，新版本仍是 sweep
+    dir: .
+    subdir: .
